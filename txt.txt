@@ -1,0 +1,5 @@
+├── index.html        # Main SPA interface & App Details View
+├── style.css         # Modern, mobile-first responsive styling
+├── app.js            # Frontend logic, Router, Search, Admin CRUD & Firebase Integration
+├── logo.png          # Place your uploaded APK SZ Store logo here
+└── firebase-rules.json # Firestore Security rules

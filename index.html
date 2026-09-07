@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>APK SZ Store — Download Free Android APKs & Games</title>
+  <meta name="description" content="Discover, explore, and safely download the latest Android apps and games with fast direct APK downloads on APK SZ Store." />
+  <link rel="icon" type="image/png" href="logo.png" />
+
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ================= TOP HEADER ================= -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-container">
+      <button class="icon-btn mobile-menu-btn" id="mobileMenuToggle" aria-label="Open menu">
+        <i class="fa-solid fa-bars-staggered"></i>
+      </button>
+
+      <a href="#home" class="brand-logo" onclick="navigateTo('home')">
+        <img src="logo.png" alt="APK SZ Store Logo" class="brand-icon" onerror="this.src='https://placehold.co/80x80/2563eb/ffffff?text=APK+SZ'" />
+        <span class="brand-text">APK SZ <span>Store</span></span>
+      </a>
+
+      <div class="header-search-bar">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="globalSearchInput" placeholder="Search apps, games, developers..." autocomplete="off" />
+        <button id="clearSearchBtn" class="clear-search-btn" style="display: none;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <nav class="desktop-nav">
+        <a href="#home" class="nav-link active" data-target="home"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="#apps" class="nav-link" data-target="apps"><i class="fa-solid fa-shapes"></i> Apps</a>
+        <a href="#games" class="nav-link" data-target="games"><i class="fa-solid fa-gamepad"></i> Games</a>
+        <a href="#categories" class="nav-link" data-target="categories"><i class="fa-solid fa-layer-group"></i> Categories</a>
+      </nav>
+    </div>
+
+    <!-- Mobile Slide Drawer -->
+    <div class="mobile-drawer" id="mobileDrawer">
+      <div class="drawer-header">
+        <div class="brand-logo">
+          <img src="logo.png" alt="APK SZ Store" class="brand-icon" />
+          <span class="brand-text">APK SZ <span>Store</span></span>
+        </div>
+        <button class="icon-btn" id="closeDrawerBtn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="drawer-links">
+        <a href="#home" class="drawer-link active" data-target="home"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="#apps" class="drawer-link" data-target="apps"><i class="fa-solid fa-shapes"></i> Apps</a>
+        <a href="#games" class="drawer-link" data-target="games"><i class="fa-solid fa-gamepad"></i> Games</a>
+        <a href="#categories" class="drawer-link" data-target="categories"><i class="fa-solid fa-layer-group"></i> Browse Categories</a>
+        <a href="#news" class="drawer-link" data-target="news"><i class="fa-regular fa-newspaper"></i> Latest News</a>
+      </div>
+    </div>
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+  </header>
+
+  <!-- ================= MAIN CONTENT VIEWS ================= -->
+  <main class="main-container" id="mainContainer">
+
+    <!-- 1. SEARCH RESULTS VIEW (Overlays when typing) -->
+    <section class="view-section search-view" id="searchView" style="display: none;">
+      <div class="section-header">
+        <h2><i class="fa-solid fa-magnifying-glass"></i> Search Results for "<span id="searchKeywordLabel"></span>"</h2>
+        <span class="badge" id="searchCountBadge">0 found</span>
+      </div>
+      <div class="app-grid" id="searchResultsGrid"></div>
+      <div class="no-results-state" id="noResultsState" style="display: none;">
+        <i class="fa-solid fa-box-open"></i>
+        <h3>No apps or games found</h3>
+        <p>Try searching with another keyword, category, or developer name.</p>
+      </div>
+    </section>
+
+    <!-- 2. HOME VIEW -->
+    <section class="view-section" id="homeView">
+      <!-- Hero Banner Carousel -->
+      <div class="hero-carousel-container">
+        <div class="hero-carousel" id="heroCarousel">
+          <!-- Populated by app.js -->
+        </div>
+        <div class="carousel-dots" id="carouselDots"></div>
+      </div>
+
+      <!-- Quick Category Chips -->
+      <div class="category-chip-scroller" id="categoryChips">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Section: Featured Items -->
+      <div class="content-block">
+        <div class="block-header">
+          <div class="title-with-icon">
+            <span class="icon-bubble orange"><i class="fa-solid fa-fire"></i></span>
+            <div>
+              <h3>Featured Picks</h3>
+              <p>Hand-curated top rated apps & games</p>
+            </div>
+          </div>
+        </div>
+        <div class="horizontal-card-scroller" id="featuredScroller"></div>
+      </div>
+
+      <!-- Section: Latest Apps -->
+      <div class="content-block">
+        <div class="block-header">
+          <div class="title-with-icon">
+            <span class="icon-bubble blue"><i class="fa-solid fa-shapes"></i></span>
+            <div>
+              <h3>Latest Apps</h3>
+              <p>Fresh updates and newly released tools</p>
+            </div>
+          </div>
+          <button class="see-more-btn" onclick="navigateTo('apps')">See All <i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+        <div class="app-grid" id="latestAppsGrid"></div>
+      </div>
+
+      <!-- Section: Popular Games -->
+      <div class="content-block">
+        <div class="block-header">
+          <div class="title-with-icon">
+            <span class="icon-bubble green"><i class="fa-solid fa-gamepad"></i></span>
+            <div>
+              <h3>Popular Games</h3>
+              <p>Most downloaded and trending titles</p>
+            </div>
+          </div>
+          <button class="see-more-btn" onclick="navigateTo('games')">See All <i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+        <div class="app-grid" id="popularGamesGrid"></div>
+      </div>
+    </section>
+
+    <!-- 3. APPS VIEW -->
+    <section class="view-section" id="appsView" style="display: none;">
+      <div class="section-title-wrap">
+        <h2><i class="fa-solid fa-shapes text-blue"></i> All Android Apps</h2>
+        <div class="filter-pills" id="appFilterPills">
+          <button class="pill active" data-filter="all">All</button>
+          <button class="pill" data-filter="popular">Popular</button>
+          <button class="pill" data-filter="top-rated">Top Rated</button>
+          <button class="pill" data-filter="latest">Latest</button>
+        </div>
+      </div>
+      <div class="app-grid" id="appsListingGrid"></div>
+    </section>
+
+    <!-- 4. GAMES VIEW -->
+    <section class="view-section" id="gamesView" style="display: none;">
+      <div class="section-title-wrap">
+        <h2><i class="fa-solid fa-gamepad text-green"></i> Android Games</h2>
+        <div class="filter-pills" id="gameFilterPills">
+          <button class="pill active" data-filter="all">All</button>
+          <button class="pill" data-filter="Action">Action</button>
+          <button class="pill" data-filter="Racing">Racing</button>
+          <button class="pill" data-filter="Sports">Sports</button>
+          <button class="pill" data-filter="Casual">Casual</button>
+        </div>
+      </div>
+      <div class="app-grid" id="gamesListingGrid"></div>
+    </section>
+
+    <!-- 5. CATEGORIES BROWSE VIEW -->
+    <section class="view-section" id="categoriesView" style="display: none;">
+      <div class="section-title-wrap">
+        <h2><i class="fa-solid fa-layer-group text-yellow"></i> Browse by Category</h2>
+      </div>
+      <div class="category-cards-grid" id="allCategoriesGrid"></div>
+    </section>
+
+    <!-- 6. NEWS VIEW -->
+    <section class="view-section" id="newsView" style="display: none;">
+      <div class="section-title-wrap">
+        <h2><i class="fa-regular fa-newspaper text-red"></i> Android News & Updates</h2>
+      </div>
+      <div class="news-list">
+        <article class="news-card">
+          <div class="news-meta"><span>September 2026</span> • <span>APK SZ Editorial</span></div>
+          <h3>Android 17: Highlights, Battery Enhancements & Privacy Features</h3>
+          <p>Explore what's new in the latest Android security and background runtime frameworks for APK optimization.</p>
+        </article>
+        <article class="news-card">
+          <div class="news-meta"><span>August 2026</span> • <span>Gaming Hub</span></div>
+          <h3>High Performance Mobile Gaming: Vulkan vs OpenGL Benchmarks</h3>
+          <p>Detailed performance benchmarks on the newest Unreal Engine 5.5 mobile gaming ports.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 7. APP DETAILS VIEW -->
+    <section class="view-section app-details-view" id="appDetailsView" style="display: none;">
+      <div class="breadcrumb" id="detailsBreadcrumb">
+        <a href="#home" onclick="navigateTo('home')">Home</a> <span>/</span>
+        <a href="#apps" id="breadcrumbType" onclick="navigateTo('apps')">Apps</a> <span>/</span>
+        <span id="breadcrumbCurrent">App Name</span>
+      </div>
+
+      <div class="details-hero-banner" id="detailsBannerWrap">
+        <img src="" id="detailsBannerImg" alt="Banner" />
+      </div>
+
+      <div class="details-header-card">
+        <img src="" id="detailsLogoImg" alt="App Logo" class="details-logo" />
+        <div class="details-header-info">
+          <h1 id="detailsTitle">App Title</h1>
+          <div class="details-developer" id="detailsDeveloper">Developer Name</div>
+          <div class="details-rating-row">
+            <div class="stars" id="detailsStars">
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star-half-stroke"></i>
+            </div>
+            <span class="rating-num" id="detailsRatingNum">4.8</span>
+            <span class="rating-count" id="detailsRatingCount">(12,450 reviews)</span>
+          </div>
+          <p class="details-tagline" id="detailsTagline">Short description goes here</p>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Ribbon -->
+      <div class="metrics-ribbon">
+        <div class="metric-item">
+          <i class="fa-solid fa-hard-drive"></i>
+          <span class="label">Size</span>
+          <strong id="metricSize">45 MB</strong>
+        </div>
+        <div class="metric-item">
+          <i class="fa-brands fa-android"></i>
+          <span class="label">Requires</span>
+          <strong id="metricAndroid">Android 8.0+</strong>
+        </div>
+        <div class="metric-item">
+          <i class="fa-solid fa-code-branch"></i>
+          <span class="label">Version</span>
+          <strong id="metricVersion">v2.4.1</strong>
+        </div>
+        <div class="metric-item">
+          <i class="fa-solid fa-download"></i>
+          <span class="label">Downloads</span>
+          <strong id="metricDownloads">14,200</strong>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="details-action-bar">
+        <button class="primary-download-btn" id="primaryDownloadBtn">
+          <i class="fa-solid fa-cloud-arrow-down"></i>
+          <span>DOWNLOAD APK <small id="downloadSizeSub">(45 MB)</small></span>
+        </button>
+        <div class="secondary-actions">
+          <button class="action-pill-btn" id="shareBtn"><i class="fa-solid fa-share-nodes"></i> Share</button>
+          <button class="action-pill-btn" id="reportBtn"><i class="fa-regular fa-flag"></i> Request Update</button>
+        </div>
+      </div>
+
+      <!-- Screenshots Gallery -->
+      <div class="details-section">
+        <h3><i class="fa-regular fa-images"></i> Preview Screenshots</h3>
+        <div class="screenshot-gallery" id="screenshotGallery"></div>
+      </div>
+
+      <!-- About App -->
+      <div class="details-section">
+        <h3><i class="fa-solid fa-circle-info"></i> About this app</h3>
+        <div class="rich-text-desc" id="detailsDescription"></div>
+      </div>
+
+      <!-- Key Features -->
+      <div class="details-section" id="featuresSection">
+        <h3><i class="fa-solid fa-star"></i> Key Features</h3>
+        <ul class="features-list" id="detailsFeaturesList"></ul>
+      </div>
+
+      <!-- What's New -->
+      <div class="details-section" id="whatsNewSection">
+        <h3><i class="fa-solid fa-bullhorn"></i> What's New</h3>
+        <div class="whats-new-box" id="detailsWhatsNew"></div>
+      </div>
+
+      <!-- Technical Specifications Table -->
+      <div class="details-section">
+        <h3><i class="fa-solid fa-list-check"></i> APK Technical Info</h3>
+        <div class="spec-table">
+          <div class="spec-row"><span>Package Category</span><strong id="specCategory">Productivity</strong></div>
+          <div class="spec-row"><span>Version Code</span><strong id="specVersion">2.4.1</strong></div>
+          <div class="spec-row"><span>File Size</span><strong id="specSize">45 MB</strong></div>
+          <div class="spec-row"><span>Minimum OS</span><strong id="specOS">Android 8.0 or higher</strong></div>
+          <div class="spec-row"><span>Developer</span><strong id="specDev">Developer Inc.</strong></div>
+          <div class="spec-row"><span>Safety Status</span><strong class="text-green"><i class="fa-solid fa-shield-halved"></i> Verified & Safe (No Malware)</strong></div>
+        </div>
+      </div>
+
+      <!-- Related Apps -->
+      <div class="details-section">
+        <h3><i class="fa-solid fa-layer-group"></i> You Might Also Like</h3>
+        <div class="app-grid" id="relatedAppsGrid"></div>
+      </div>
+    </section>
+
+    <!-- 8. ADMIN DASHBOARD & MANAGEMENT (Hidden by default) -->
+    <section class="view-section admin-view" id="adminView" style="display: none;">
+      <div class="admin-wrapper">
+        <aside class="admin-sidebar">
+          <div class="admin-brand">
+            <img src="logo.png" alt="Logo" class="brand-icon" />
+            <div>
+              <strong>APK SZ</strong>
+              <small>Control Center</small>
+            </div>
+          </div>
+          <nav class="admin-nav">
+            <button class="admin-nav-item active" data-tab="adm-overview"><i class="fa-solid fa-chart-pie"></i> Overview</button>
+            <button class="admin-nav-item" data-tab="adm-apps"><i class="fa-solid fa-shapes"></i> Manage Apps</button>
+            <button class="admin-nav-item" data-tab="adm-games"><i class="fa-solid fa-gamepad"></i> Manage Games</button>
+            <button class="admin-nav-item" data-tab="adm-categories"><i class="fa-solid fa-tags"></i> Categories</button>
+            <button class="admin-nav-item" data-tab="adm-banners"><i class="fa-regular fa-images"></i> Banners</button>
+            <button class="admin-nav-item" data-tab="adm-settings"><i class="fa-solid fa-sliders"></i> Settings</button>
+            <button class="admin-nav-item text-red" id="adminLogoutBtn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
+          </nav>
+        </aside>
+
+        <main class="admin-content">
+          <!-- Overview Tab -->
+          <div class="admin-tab-pane active" id="adm-overview">
+            <h2>Dashboard Analytics</h2>
+            <div class="stat-cards-grid">
+              <div class="stat-card">
+                <i class="fa-solid fa-shapes text-blue"></i>
+                <span class="stat-label">Total Apps</span>
+                <span class="stat-num" id="statTotalApps">0</span>
+              </div>
+              <div class="stat-card">
+                <i class="fa-solid fa-gamepad text-green"></i>
+                <span class="stat-label">Total Games</span>
+                <span class="stat-num" id="statTotalGames">0</span>
+              </div>
+              <div class="stat-card">
+                <i class="fa-solid fa-cloud-arrow-down text-orange"></i>
+                <span class="stat-label">Total Downloads</span>
+                <span class="stat-num" id="statTotalDownloads">0</span>
+              </div>
+              <div class="stat-card">
+                <i class="fa-solid fa-layer-group text-yellow"></i>
+                <span class="stat-label">Categories</span>
+                <span class="stat-num" id="statTotalCategories">0</span>
+              </div>
+            </div>
+
+            <div class="admin-table-card">
+              <h3><i class="fa-solid fa-chart-line"></i> Top Downloaded Items</h3>
+              <table class="data-table" id="topDownloadsTable">
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Type</th>
+                    <th>Version</th>
+                    <th>Downloads</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Apps & Games Management Tabs -->
+          <div class="admin-tab-pane" id="adm-apps">
+            <div class="pane-header">
+              <h2>Apps Management</h2>
+              <button class="btn-primary" onclick="openItemModal('app')"><i class="fa-solid fa-plus"></i> Add New App</button>
+            </div>
+            <div class="admin-table-card">
+              <table class="data-table" id="adminAppsTable">
+                <thead>
+                  <tr>
+                    <th>Logo</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Version</th>
+                    <th>Downloads</th>
+                    <th>Featured</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="admin-tab-pane" id="adm-games">
+            <div class="pane-header">
+              <h2>Games Management</h2>
+              <button class="btn-primary" onclick="openItemModal('game')"><i class="fa-solid fa-plus"></i> Add New Game</button>
+            </div>
+            <div class="admin-table-card">
+              <table class="data-table" id="adminGamesTable">
+                <thead>
+                  <tr>
+                    <th>Logo</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Version</th>
+                    <th>Downloads</th>
+                    <th>Featured</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Categories Tab -->
+          <div class="admin-tab-pane" id="adm-categories">
+            <div class="pane-header">
+              <h2>Categories Management</h2>
+              <button class="btn-primary" onclick="promptAddCategory()"><i class="fa-solid fa-plus"></i> Add Category</button>
+            </div>
+            <div class="admin-table-card">
+              <table class="data-table" id="adminCategoriesTable">
+                <thead>
+                  <tr>
+                    <th>Category Name</th>
+                    <th>Target Type</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Banners Tab -->
+          <div class="admin-tab-pane" id="adm-banners">
+            <div class="pane-header">
+              <h2>Homepage Banners</h2>
+              <button class="btn-primary" onclick="openBannerModal()"><i class="fa-solid fa-plus"></i> Add Banner</button>
+            </div>
+            <div class="admin-table-card">
+              <table class="data-table" id="adminBannersTable">
+                <thead>
+                  <tr>
+                    <th>Preview</th>
+                    <th>Title</th>
+                    <th>Subtext</th>
+                    <th>Target Link</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Settings Tab -->
+          <div class="admin-tab-pane" id="adm-settings">
+            <h2>Firebase & Store Settings</h2>
+            <div class="settings-form-card">
+              <p>Configure Firebase Firestore credentials or switch between Cloud and LocalStorage demo mode:</p>
+              <div class="form-group">
+                <label>Storage Mode</label>
+                <select id="storageModeSelect">
+                  <option value="local">LocalStorage Mode (Instant Demo / Offline)</option>
+                  <option value="firebase">Firebase Firestore (Cloud Sync)</option>
+                </select>
+              </div>
+              <button class="btn-primary" onclick="saveSettings()">Save Settings</button>
+            </div>
+          </div>
+        </main>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= MOBILE BOTTOM NAVIGATION ================= -->
+  <nav class="mobile-bottom-nav">
+    <a href="#home" class="b-nav-item active" data-target="home"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="#apps" class="b-nav-item" data-target="apps"><i class="fa-solid fa-shapes"></i><span>Apps</span></a>
+    <a href="#games" class="b-nav-item" data-target="games"><i class="fa-solid fa-gamepad"></i><span>Games</span></a>
+    <a href="#categories" class="b-nav-item" data-target="categories"><i class="fa-solid fa-layer-group"></i><span>Browse</span></a>
+    <a href="#news" class="b-nav-item" data-target="news"><i class="fa-regular fa-newspaper"></i><span>News</span></a>
+  </nav>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="brand-logo">
+          <img src="logo.png" alt="APK SZ Store Logo" class="brand-icon" />
+          <span class="brand-text">APK SZ <span>Store</span></span>
+        </div>
+        <p>APK SZ Store is a free, safe, and lightning-fast portal for discovering and downloading Android APK packages with verified signatures.</p>
+      </div>
+      <div class="footer-links-group">
+        <h4>Explore</h4>
+        <a href="#apps" onclick="navigateTo('apps')">Android Apps</a>
+        <a href="#games" onclick="navigateTo('games')">Android Games</a>
+        <a href="#categories" onclick="navigateTo('categories')">All Categories</a>
+        <a href="#news" onclick="navigateTo('news')">Latest News</a>
+      </div>
+      <div class="footer-links-group">
+        <h4>Legal & Support</h4>
+        <a href="#dmca" onclick="alert('DMCA Policy: Contact admin for immediate takedown.')">DMCA Disclaimer</a>
+        <a href="#privacy" onclick="alert('Privacy Policy: No personal data is stored.')">Privacy Policy</a>
+        <a href="#terms" onclick="alert('Terms of Service: For testing and educational use.')">Terms of Service</a>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <span>© 2026 APK SZ Store. All rights reserved.</span>
+      <!-- Small discreet admin entry link as requested -->
+      <a href="#admin" class="admin-discreet-link" id="openAdminLoginBtn">Admin</a>
+    </div>
+  </footer>
+
+  <!-- ================= ADMIN AUTH MODAL ================= -->
+  <div class="modal-overlay" id="adminLoginModal" style="display: none;">
+    <div class="modal-card auth-modal">
+      <div class="modal-header">
+        <div class="brand-logo">
+          <img src="logo.png" alt="Logo" class="brand-icon" />
+          <h3>Admin Access</h3>
+        </div>
+        <button class="icon-btn" onclick="closeAdminLoginModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
+        <p class="auth-notice">Enter the administrative passkey or Firebase Admin credential to manage store inventory.</p>
+        <div class="form-group">
+          <label for="adminEmail">Admin Email (or Default)</label>
+          <input type="email" id="adminEmail" value="admin@apksz.store" required />
+        </div>
+        <div class="form-group">
+          <label for="adminPass">Secure Master Key</label>
+          <input type="password" id="adminPass" placeholder="Enter secure key..." required />
+        </div>
+        <div class="error-msg" id="loginError" style="display:none;">Invalid credentials. Access denied.</div>
+        <button type="submit" class="btn-primary btn-block">Verify & Continue <i class="fa-solid fa-lock"></i></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= ITEM (APP/GAME) ADD/EDIT MODAL ================= -->
+  <div class="modal-overlay" id="itemEditorModal" style="display: none;">
+    <div class="modal-card large-modal">
+      <div class="modal-header">
+        <h3 id="itemEditorTitle">Add New Package</h3>
+        <button class="icon-btn" onclick="closeItemModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="itemEditorForm" onsubmit="handleSaveItem(event)">
+        <input type="hidden" id="editItemId" />
+        <input type="hidden" id="editItemType" value="app" />
+
+        <div class="form-row">
+          <div class="form-group flex-2">
+            <label>Name</label>
+            <input type="text" id="editName" required placeholder="e.g. Apex Photo Editor Pro" />
+          </div>
+          <div class="form-group flex-1">
+            <label>Category</label>
+            <select id="editCategory" required></select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Developer</label>
+            <input type="text" id="editDeveloper" required placeholder="e.g. SZ Mobile Labs" />
+          </div>
+          <div class="form-group flex-1">
+            <label>Version</label>
+            <input type="text" id="editVersion" required placeholder="e.g. 3.2.0" />
+          </div>
+          <div class="form-group flex-1">
+            <label>APK File Size</label>
+            <input type="text" id="editSize" required placeholder="e.g. 52 MB" />
+          </div>
+          <div class="form-group flex-1">
+            <label>Android Requirement</label>
+            <input type="text" id="editAndroid" required placeholder="e.g. 8.0+" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>App Logo URL</label>
+            <input type="url" id="editLogo" required placeholder="https://images.unsplash.com/... or cloud storage URL" />
+          </div>
+          <div class="form-group flex-1">
+            <label>Banner URL (Hero/Details)</label>
+            <input type="url" id="editBanner" placeholder="https://images.unsplash.com/..." />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Direct APK Download URL</label>
+          <input type="url" id="editDownloadUrl" required placeholder="https://example.com/files/app.apk" />
+        </div>
+
+        <div class="form-group">
+          <label>Short Tagline</label>
+          <input type="text" id="editTagline" required placeholder="Fast & lightweight professional mobile editor." />
+        </div>
+
+        <div class="form-group">
+          <label>Full Description</label>
+          <textarea id="editDescription" rows="4" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Key Features (One per line)</label>
+          <textarea id="editFeatures" rows="3" placeholder="AI Smart Enhancement&#10;Batch Export Support&#10;No Watermark"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>What's New (Changelog)</label>
+          <textarea id="editWhatsNew" rows="2" placeholder="Bug fixes and stability enhancements for Android 15/16."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Screenshots (Comma separated image URLs)</label>
+          <input type="text" id="editScreenshots" placeholder="https://url1.jpg, https://url2.jpg" />
+        </div>
+
+        <div class="form-row checkbox-row">
+          <label class="custom-checkbox">
+            <input type="checkbox" id="editFeatured" />
+            <span>Mark as Featured</span>
+          </label>
+          <label class="custom-checkbox">
+            <input type="checkbox" id="editPublished" checked />
+            <span>Published (Visible to public)</span>
+          </label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" onclick="closeItemModal()">Cancel</button>
+          <button type="submit" class="btn-primary">Save Package</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Firebase Modular Scripts (Optional Cloud Firestore Backend) -->
+  <script type="module">
+    // Optional: Inject your real Firebase config here if switching from localStorage
+    window.FIREBASE_CONFIG = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "your-app.firebaseapp.com",
+      projectId: "your-app-sz-store",
+      storageBucket: "your-app.appspot.com",
+      messagingSenderId: "0000000000",
+      appId: "1:0000000000:web:00000000000000"
+    };
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>
