@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>APK SZ Store</title>
+  
+  <!-- Logo Favicon -->
+  <link rel="icon" type="image/png" href="https://i.ibb.co.com/svHF8kCY/file-000000001d64820880cdac1e1065928f.png" />
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ================= TOP HEADER (As in screenshot) ================= -->
+  <header class="play-header" id="mainHeader">
+    <div class="header-inner">
+      <!-- App Store Logo -->
+      <a href="#home" class="header-brand-logo" onclick="navigateTo('home')">
+        <img src="https://i.ibb.co.com/svHF8kCY/file-000000001d64820880cdac1e1065928f.png" alt="APK SZ Logo" class="brand-img" />
+      </a>
+
+      <!-- Expandable Interactive Search Bar -->
+      <div class="search-pill-box" id="searchBoxContainer">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="storeSearchInput" placeholder="অ্যাপস বা গেম সার্চ করুন..." autocomplete="off" />
+        <button id="closeSearchBtn" class="close-search-btn" style="display:none;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Screenshot style </> Action Menu Button -->
+      <div class="header-actions">
+        <button class="menu-code-btn" id="topMenuToggle" aria-label="Menu">
+          <i class="fa-solid fa-code"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- 3-Dot / Code Dropdown Menu -->
+    <div class="top-dropdown-menu" id="topDropdownMenu">
+      <div class="dropdown-item" onclick="navigateTo('home')"><i class="fa-solid fa-house"></i> হোম পেজ</div>
+      <div class="dropdown-item" onclick="navigateTo('apps')"><i class="fa-solid fa-shapes"></i> সকল অ্যাপস</div>
+      <div class="dropdown-item" onclick="navigateTo('games')"><i class="fa-solid fa-gamepad"></i> সকল গেমস</div>
+      <div class="dropdown-divider"></div>
+      <div class="dropdown-item admin-link-item" onclick="openAdminAccess()"><i class="fa-solid fa-user-shield"></i> এডমিন প্যানেল</div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN APP VIEWPORT ================= -->
+  <main class="store-viewport" id="storeViewport">
+
+    <!-- 1. LIVE SEARCH RESULTS -->
+    <section class="view-panel" id="searchView" style="display: none;">
+      <div class="section-headline">
+        <h2>সার্চ ফলাফল: "<span id="searchWord"></span>"</h2>
+      </div>
+      <div class="store-horizontal-shelf wrap-grid" id="searchResultList"></div>
+      <div class="empty-state" id="searchEmpty" style="display:none;">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <p>কোনো অ্যাপ খুঁজে পাওয়া যায়নি।</p>
+      </div>
+    </section>
+
+    <!-- 2. HOME VIEW (SCREENSHOT EXACT MATCH) -->
+    <section class="view-panel" id="homeView">
+      
+      <!-- Section 1: Recommended for you (Swipe Right 👉) -->
+      <div class="shelf-container">
+        <div class="shelf-header">
+          <h2 class="shelf-title">Recommended for you <span class="swipe-hint">(Swipe Right 👉)</span></h2>
+        </div>
+        <div class="store-horizontal-shelf" id="recommendedShelf"></div>
+      </div>
+
+      <!-- Section 2: Top Charts (Swipe Right 👉) -->
+      <div class="shelf-container">
+        <div class="shelf-header">
+          <h2 class="shelf-title">Top Charts <span class="swipe-hint">(Swipe Right 👉)</span></h2>
+        </div>
+        <div class="store-horizontal-shelf" id="topChartsShelf"></div>
+      </div>
+
+      <!-- Section 3: Editor's Choice (Top Rated) -->
+      <div class="shelf-container">
+        <div class="shelf-header">
+          <h2 class="shelf-title">Editor's Choice <span class="swipe-hint">(Top Rated)</span></h2>
+        </div>
+        <div class="store-horizontal-shelf" id="editorsChoiceShelf"></div>
+      </div>
+
+    </section>
+
+    <!-- 3. ALL APPS VIEW -->
+    <section class="view-panel" id="appsView" style="display: none;">
+      <div class="shelf-header">
+        <h2 class="shelf-title">সকল অ্যান্ড্রয়েড অ্যাপস</h2>
+      </div>
+      <div class="store-horizontal-shelf wrap-grid" id="allAppsGrid"></div>
+    </section>
+
+    <!-- 4. ALL GAMES VIEW -->
+    <section class="view-panel" id="gamesView" style="display: none;">
+      <div class="shelf-header">
+        <h2 class="shelf-title">সকল অ্যান্ড্রয়েড গেমস</h2>
+      </div>
+      <div class="store-horizontal-shelf wrap-grid" id="allGamesGrid"></div>
+    </section>
+
+    <!-- 5. APP DETAILS FULL VIEW -->
+    <section class="view-panel app-details-page" id="detailsView" style="display: none;">
+      <button class="back-pill-btn" onclick="navigateTo('home')">
+        <i class="fa-solid fa-arrow-left"></i> পেছনে যান
+      </button>
+
+      <!-- App Header Profile -->
+      <div class="details-top-card">
+        <img src="" id="dIcon" class="details-big-icon" alt="Icon" />
+        <div class="details-meta-box">
+          <h1 id="dName">App Name</h1>
+          <div class="d-dev" id="dDev">Developer</div>
+          <div class="d-badge-row">
+            <span class="d-badge verified"><i class="fa-solid fa-circle-check"></i> ভেরিফাইড APK</span>
+            <span class="d-badge cat" id="dCategory">Tools</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Ribbon -->
+      <div class="details-stats-ribbon">
+        <div class="stat-col">
+          <strong id="dRating">4.8 ★</strong>
+          <span id="dReviews">12K রিভিউ</span>
+        </div>
+        <div class="stat-div"></div>
+        <div class="stat-col">
+          <strong id="dDownloads">10K+</strong>
+          <span>ডাউনলোড</span>
+        </div>
+        <div class="stat-div"></div>
+        <div class="stat-col">
+          <strong id="dSize">45 MB</strong>
+          <span>সাইজ</span>
+        </div>
+        <div class="stat-div"></div>
+        <div class="stat-col">
+          <strong id="dVersion">v1.0.0</strong>
+          <span>ভার্সন</span>
+        </div>
+      </div>
+
+      <!-- Direct Download APK Button -->
+      <div class="details-action-area">
+        <button class="install-apk-btn" id="dDownloadBtn">
+          <i class="fa-solid fa-download"></i> সরাসরি ডাউনলোড APK
+        </button>
+        <button class="share-round-btn" id="dShareBtn">
+          <i class="fa-solid fa-share-nodes"></i>
+        </button>
+      </div>
+
+      <!-- 3 to 10 Screenshots Gallery -->
+      <div class="details-card-block">
+        <h3><i class="fa-regular fa-images"></i> অ্যাপ স্ক্রিনশট সমূহ</h3>
+        <div class="screenshots-scroll-view" id="dScreenshots"></div>
+      </div>
+
+      <!-- Description -->
+      <div class="details-card-block">
+        <h3><i class="fa-solid fa-circle-info"></i> বিবরণ (About this app)</h3>
+        <p class="details-desc-text" id="dDescription"></p>
+      </div>
+
+      <!-- What's New -->
+      <div class="details-card-block">
+        <h3><i class="fa-solid fa-bullhorn"></i> নতুন আপডেট (What's New)</h3>
+        <div class="whats-new-box" id="dWhatsNew"></div>
+      </div>
+    </section>
+
+    <!-- 6. ADMIN PANEL DASHBOARD -->
+    <section class="view-panel admin-dashboard-page" id="adminView" style="display: none;">
+      <div class="admin-header-bar">
+        <div class="admin-title">
+          <img src="https://i.ibb.co.com/svHF8kCY/file-000000001d64820880cdac1e1065928f.png" class="admin-logo-small" />
+          <h3>এডমিন কন্ট্রোল প্যানেল</h3>
+        </div>
+        <button class="admin-logout-btn" onclick="adminLogout()"><i class="fa-solid fa-right-from-bracket"></i> লগআউট</button>
+      </div>
+
+      <div class="admin-add-btn-wrap">
+        <button class="btn-primary" onclick="openAppUploadModal()"><i class="fa-solid fa-cloud-arrow-up"></i> সরাসরি নতুন অ্যাপ / গেম আপলোড</button>
+      </div>
+
+      <!-- Uploaded Items List -->
+      <div class="admin-table-container">
+        <h3>আপলোড করা অ্যাপস ও গেমসের তালিকা</h3>
+        <div id="adminItemsList" class="admin-items-grid"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= ADMIN LOGIN MODAL ================= -->
+  <div class="modal-backdrop" id="adminLoginModal" style="display:none;">
+    <div class="modal-window auth-window">
+      <div class="modal-top">
+        <img src="https://i.ibb.co.com/svHF8kCY/file-000000001d64820880cdac1e1065928f.png" class="brand-img" />
+        <h3>এডমিন অ্যাক্সেস</h3>
+        <button class="close-x" onclick="closeAdminModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form onsubmit="handleAdminAuth(event)">
+        <div class="form-group">
+          <label>এডমিন পাসওয়ার্ড দিন</label>
+          <input type="password" id="adminPassInput" placeholder="পাসওয়ার্ড লিখুন..." required />
+        </div>
+        <div class="error-text" id="authError" style="display:none;">ভুল পাসওয়ার্ড! আবার চেষ্টা করুন।</div>
+        <button type="submit" class="btn-primary full-w">লগইন করুন</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= DIRECT FILE UPLOAD / EDIT MODAL ================= -->
+  <div class="modal-backdrop" id="appUploadModal" style="display:none;">
+    <div class="modal-window large-window">
+      <div class="modal-top">
+        <h3 id="uploadModalHeading">সরাসরি ফাইল থেকে অ্যাপ আপলোড</h3>
+        <button class="close-x" onclick="closeUploadModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form id="appUploadForm" onsubmit="handleSaveApp(event)">
+        <input type="hidden" id="editAppId" />
+
+        <div class="form-row">
+          <div class="form-group flex-2">
+            <label>অ্যাপ বা গেমের নাম *</label>
+            <input type="text" id="inAppName" required placeholder="যেমন: TZ Auto Clicker" />
+          </div>
+          <div class="form-group flex-1">
+            <label>ক্যাটাগরি *</label>
+            <select id="inCategory">
+              <option value="Tools">Tools</option>
+              <option value="Editor">Editor</option>
+              <option value="Action">Action</option>
+              <option value="Racing">Racing</option>
+              <option value="Social">Social</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>টাইপ</label>
+            <select id="inType">
+              <option value="app">Apps (অ্যাপস)</option>
+              <option value="game">Games (গেমস)</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label>সেকশন অবস্থান</label>
+            <select id="inSection">
+              <option value="recommended">Recommended for you</option>
+              <option value="topcharts">Top Charts</option>
+              <option value="editors">Editor's Choice</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>ডেভেলপার নাম *</label>
+            <input type="text" id="inDev" required placeholder="যেমন: TZ Studio" />
+          </div>
+          <div class="form-group flex-1">
+            <label>ভার্সন কোড *</label>
+            <input type="text" id="inVersion" required placeholder="যেমন: 1.0.4" />
+          </div>
+        </div>
+
+        <!-- 100% DIRECT FILE UPLOADS (NO LINKS) -->
+        <div class="file-upload-block">
+          <label><i class="fa-solid fa-image text-green"></i> ১. সরাসরি গ্যালারি থেকে অ্যাপ লোগো সিলেক্ট করুন *</label>
+          <input type="file" id="fileLogo" accept="image/*" />
+          <small class="file-hint">গ্যালারি থেকে স্পষ্ট স্কয়ার লোগো সিলেক্ট করুন।</small>
+        </div>
+
+        <div class="file-upload-block">
+          <label><i class="fa-brands fa-android text-green"></i> ২. সরাসরি মেমোরি থেকে আসল .APK ফাইল আপলোড করুন *</label>
+          <input type="file" id="fileApk" accept=".apk" />
+          <small class="file-hint">ক্লিক করলে ইউজার সরাসরি আপনার এই আপলোড করা ফাইলটি ডাউনলোড করবে।</small>
+        </div>
+
+        <div class="file-upload-block">
+          <label><i class="fa-regular fa-images text-green"></i> ৩. গ্যালারি থেকে ৩ থেকে ১০টি স্ক্রিনশট সিলেক্ট করুন *</label>
+          <input type="file" id="fileScreenshots" accept="image/*" multiple />
+          <small class="file-hint">একসাথে ৩টি থেকে সর্বোচ্চ ১০টি ছবি সিলেক্ট করতে পারেন।</small>
+        </div>
+
+        <div class="form-group">
+          <label>অ্যাপের বিবরণ (Description) *</label>
+          <textarea id="inDesc" rows="3" required placeholder="অ্যাপ সম্পর্কে লিখুন..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>নতুন কি কি যুক্ত হয়েছে? (What's New)</label>
+          <textarea id="inWhatsNew" rows="2" placeholder="বাগ ফিক্স ও নতুন ফিচার..."></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" onclick="closeUploadModal()">বাতিল</button>
+          <button type="submit" class="btn-primary" id="saveSubmitBtn">আপলোড ও সংরক্ষণ করুন</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Message -->
+  <div class="toast-box" id="toastBox"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
